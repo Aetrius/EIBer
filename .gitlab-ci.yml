@@ -27,8 +27,9 @@ podman_job:
     - mkdir ./eib/logs
     - mkdir ./eib/iso
     - cp SL-Micro-6.0-Packages-x86_64-GM.iso ./eib/base-images
-    - systemctl start docker
-    - systemctl enable docker
+    - dockerd &
+    - sleep 10  # Give the Docker daemon some time to start
+    - docker info  # Check if Docker is running
     - |
       docker run --rm --privileged -v ./eib:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.1 build --definition-file definition.yaml || true
       tree ./eib
