@@ -27,8 +27,8 @@ podman_job:
     - mkdir ./eib/logs
     - mkdir ./eib/iso
     - cp SL-Micro-6.0-Packages-x86_64-GM.iso ./eib/base-images
-    - sudo systemctl start docker
-    - sudo systemctl enable docker
+    - systemctl start docker
+    - systemctl enable docker
     - |
       docker run --rm --privileged -v ./eib:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.1 build --definition-file definition.yaml || true
       tree ./eib
