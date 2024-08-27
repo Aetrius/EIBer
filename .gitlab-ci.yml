@@ -37,6 +37,7 @@ podman_job:
       - SL-Micro-6.0-Packages-x86_64-GM.iso
       - ./eib/logs/*.log
       - ./eib/iso/*.iso
+    when: always
     expire_in: 1 hour
 
     #https://gitlab.com/sre-baremetal/EIBer/-/package_files/145086370/download
