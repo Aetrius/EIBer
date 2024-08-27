@@ -14,7 +14,7 @@ base_iso_curl:
       - SL-Micro-6.0-Packages-x86_64-GM.iso
     expire_in: 1 hour
 
-podman_job:
+docker_in_docker_job:
   stage: test
   image: docker:20.10
   services:
