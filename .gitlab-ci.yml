@@ -26,7 +26,7 @@ podman_job:
     - mkdir -p ./eib/base-images ./eib/logs ./eib/iso
     - cp SL-Micro-6.0-Packages-x86_64-GM.iso ./eib/base-images
     - |
-      echo '{"storage-driver": "vfs"}' | sudo tee /etc/docker/daemon.json
+      echo '{"storage-driver": "vfs"}' | tee /etc/docker/daemon.json
     - dockerd &
     - sleep 10  # Wait for the Docker daemon to start
     - docker info  # Verify Docker is running
