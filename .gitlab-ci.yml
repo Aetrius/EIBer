@@ -22,17 +22,12 @@ docker_in_docker_job:
   needs:
     - base_iso_curl
   script:
-    # - zypper ref
-    # - zypper --non-interactive install -y podman runc tree docker
     - ls -asl | grep *.iso
     - mkdir -p ./eib/base-images ./eib/logs ./eib/iso
     - cp SL-Micro-6.0-Packages-x86_64-GM.iso ./eib/base-images
-    # - export DOCKER_DRIVER=vfs  # Set the storage driver to vfs
-    # - |
-    #   echo '{"exec-opts": ["native.cgroupdriver=cgroupfs"], "cgroup-parent": "/sys/fs/cgroup"}' | tee /etc/docker/daemon.json
     - dockerd &
     - sleep 10  # Wait for the Docker daemon to start
-    - docker info  # Verify Docker is running
+    - docker info  # Verify Docker information
     - |
       docker run --rm --privileged -v $(pwd)/eib:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.1 build --definition-file definition.yaml || true
       tree ./eib
@@ -45,7 +40,3 @@ docker_in_docker_job:
       - ./eib/iso/*.iso
     when: always
     expire_in: 1 hour
-
-    #https://gitlab.com/sre-baremetal/EIBer/-/package_files/145086370/download
-    # - podman info
-    # - podman run --rm docker.io/library/alpine:latest echo "Podman is working!"
