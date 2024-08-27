@@ -18,7 +18,7 @@ podman_job:
   stage: test
   image: opensuse/tumbleweed
   needs:
-    - base_iso_curlv
+    - base_iso_curl
   script:
     - zypper ref
     - zypper --non-interactive install -y podman
