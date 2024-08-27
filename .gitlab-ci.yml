@@ -1,0 +1,11 @@
+stages:
+  - podman
+
+podman_job:
+  stage: podman
+  image: opensuse/tumbleweed
+  script:
+    - zypper ref
+    - zypper install -y podman
+    - podman info
+    # - podman run --rm docker.io/library/alpine:latest echo "Podman is working!"
