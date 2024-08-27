@@ -23,6 +23,7 @@ podman_job:
   script:
     - zypper ref
     - zypper install -y podman
+    - zypper install runc
     - podman run --rm --privileged --runtime=runc --cgroup-manager=cgroupfs -it -v .:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.1 build --definition-file ./definition.yaml
   artifacts:
     paths:
