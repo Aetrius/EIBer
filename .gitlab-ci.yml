@@ -18,7 +18,7 @@ podman_job:
   stage: test
   image: opensuse/tumbleweed
   needs:
-    - base_iso_curl
+    - base_iso_curlv
   script:
     - zypper ref
     - zypper --non-interactive install -y podman
@@ -26,6 +26,7 @@ podman_job:
     - podman run --rm --privileged --runtime=runc --cgroup-manager=cgroupfs -it -v .:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.1 build --definition-file ./definition.yaml
   artifacts:
     paths:
+      - ls -asl | grep *.iso
       - SL-Micro-6.0-Packages-x86_64-GM.iso
     expire_in: 1 hour
 
