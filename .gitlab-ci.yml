@@ -27,7 +27,7 @@ podman_job:
     - cp SL-Micro-6.0-Packages-x86_64-GM.iso ./eib/base-images
     - export DOCKER_DRIVER=vfs  # Set the storage driver to vfs
     - |
-      echo '{"storage-driver": "vfs"}' | tee /etc/docker/daemon.json
+      echo '{"exec-opts": ["native.cgroupdriver=cgroupfs"], "cgroup-parent": "/sys/fs/cgroup"}' | tee /etc/docker/daemon.json
     - dockerd &
     - sleep 10  # Wait for the Docker daemon to start
     - docker info  # Verify Docker is running
