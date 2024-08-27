@@ -7,12 +7,11 @@ base_iso_curl:
   image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/curlimages/curl
   script:
   - |
-    curl --header "PRIVATE-TOKEN: $CI_JOB_TOKEN" --output SLE-Micro.x86_64-5.5.0-Default-SelfInstall-Build9.2.install.iso \
-    "https://gitlab.goriv.co/api/v4/projects/it/etmi/mcp/baremetal-image-builder/packages/generic/iso/5.5.0/install.iso"
-    curl go.uber.org
+    curl --header "PRIVATE-TOKEN: $CI_JOB_TOKEN" --output SL-Micro-6.0-Packages-x86_64-GM.iso \
+    "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/6.0.0/SL-Micro-6.0-Packages-x86_64-GM.iso"
   artifacts:
     paths:
-      - SLE-Micro.x86_64-5.5.0-Default-SelfInstall-Build9.2.install.iso
+      - SL-Micro-6.0-Packages-x86_64-GM.iso
     expire_in: 1 hour
 
 podman_job:
@@ -27,7 +26,7 @@ podman_job:
     - podman run --rm --privileged --runtime=runc --cgroup-manager=cgroupfs -it -v .:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.1 build --definition-file ./definition.yaml
   artifacts:
     paths:
-      - SLE-Micro.x86_64-5.5.0-Default-SelfInstall-Build9.2.install.iso
+      - SL-Micro-6.0-Packages-x86_64-GM.iso
     expire_in: 1 hour
 
     #https://gitlab.com/sre-baremetal/EIBer/-/package_files/145086370/download
