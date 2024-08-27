@@ -34,7 +34,7 @@ podman_job:
     # - sleep 10  # Wait for the Docker daemon to start
     # - docker info  # Verify Docker is running
     - |
-      docker run --rm --privileged -v ./eib:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.1 build --definition-file definition.yaml || true
+      docker run --rm --privileged -v $(pwd)/eib:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.1 build --definition-file definition.yaml || true
       tree ./eib
       cp ./eib/_build/build*/*.log ./eib/logs/
       cp ./eib/_build/build*/iso-extract/*.iso ./eib/iso/
