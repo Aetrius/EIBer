@@ -27,7 +27,7 @@ podman_job:
     - mkdir ./eib/logs
     - mkdir ./eib/iso
     - cp SL-Micro-6.0-Packages-x86_64-GM.iso ./eib/base-images
-    - dockerd &
+    - dockerd --storage-driver=vfs
     - sleep 10  # Give the Docker daemon some time to start
     - docker info  # Check if Docker is running
     - |
