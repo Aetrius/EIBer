@@ -23,18 +23,18 @@ podman_job:
     - zypper ref
     - zypper --non-interactive install -y podman runc tree docker
     - ls -asl | grep *.iso
-    - mkdir ./eib/base-images
-    - mkdir ./eib/logs
-    - mkdir ./eib/iso
+    - mkdir -p ./eib/base-images ./eib/logs ./eib/iso
     - cp SL-Micro-6.0-Packages-x86_64-GM.iso ./eib/base-images
-    - dockerd --storage-driver=vfs &
-    - sleep 10  # Give the Docker daemon some time to start
-    - docker info  # Check if Docker is running
+    - |
+      echo '{"storage-driver": "vfs"}' | sudo tee /etc/docker/daemon.json
+    - dockerd &
+    - sleep 10  # Wait for the Docker daemon to start
+    - docker info  # Verify Docker is running
     - |
       docker run --rm --privileged -v ./eib:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.1 build --definition-file definition.yaml || true
       tree ./eib
-      cp ./eib/_build/build*/*.log ./eib/logs/ 
-      cp ./eib/_build/build*/iso-extract/*.iso ./eib/iddcdadso/ 
+      cp ./eib/_build/build*/*.log ./eib/logs/
+      cp ./eib/_build/build*/iso-extract/*.iso ./eib/iso/
   artifacts:
     paths:
       - SL-Micro-6.0-Packages-x86_64-GM.iso
