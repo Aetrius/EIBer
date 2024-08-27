@@ -8,7 +8,7 @@ base_iso_curl:
   script:
     - |
       curl --header "PRIVATE-TOKEN: $CI_JOB_TOKEN" --retry 5 --retry-connrefused --output SL-Micro-6.0-Packages-x86_64-GM.iso \
-      "https://gitlab.com/sre-baremetal/EIBer/-/package_files/145096275/download"
+      ""https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/6.0.0/SL-Micro-6.0-Packages-x86_64-GM.iso""
     - |
       file_size=$(stat -c%s SL-Micro-6.0-Packages-x86_64-GM.iso)
       if [ "$file_size" -lt 1000000000 ]; then
