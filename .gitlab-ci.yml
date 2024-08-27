@@ -28,7 +28,7 @@ podman_job:
     - mkdir ./eib/iso
     - cp SL-Micro-6.0-Packages-x86_64-GM.iso ./eib/base-images
     - |
-      podman run --rm --privileged --runtime=runc --cgroup-manager=host -it -v ./eib:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.1 build --definition-file definition.yaml || true
+      podman run --rm --privileged --runtime=runc --cgroup-manager=cgroupfs -it -v ./eib:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.1 build --definition-file definition.yaml || true
       tree ./eib
       cp ./eib/_build/build*/*.log ./eib/logs/ 
       cp ./eib/_build/build*/iso-extract/*.iso ./eib/iddcdadso/ 
