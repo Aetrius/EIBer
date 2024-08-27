@@ -23,6 +23,7 @@ podman_job:
     - zypper ref
     - zypper --non-interactive install -y podman runc tree
     - ls -asl | grep *.iso
+    - mkdir /eib/base-images
     - cp SL-Micro-6.0-Packages-x86_64-GM.iso /eib/base-images
     - tree /eib
     - podman run --rm --privileged --runtime=runc --cgroup-manager=cgroupfs -it -v /eib:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.1 build --definition-file ./definition.yaml
