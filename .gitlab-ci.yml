@@ -25,14 +25,17 @@ podman_job:
     - ls -asl | grep *.iso
     - mkdir ./eib/base-images
     - mkdir ./eib/logs
+    - mkdir ./eib/iso
     - cp SL-Micro-6.0-Packages-x86_64-GM.iso ./eib/base-images
     - tree ./eib
     - podman run --rm --privileged --runtime=runc --cgroup-manager=cgroupfs -it -v ./eib:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.1 build --definition-file definition.yaml || true
     - cp ./eib/_build/build*/*.log ./eib/logs/ 
+    - cp ./eib/_build/build*/iso-extract/*.iso ./eib/iso/ 
   artifacts:
     paths:
       - SL-Micro-6.0-Packages-x86_64-GM.iso
       - ./eib/logs/*.log
+      - ./eib/iso/*.iso
     expire_in: 1 hour
 
     #https://gitlab.com/sre-baremetal/EIBer/-/package_files/145086370/download
