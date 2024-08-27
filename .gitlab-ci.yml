@@ -16,25 +16,25 @@ base_iso_curl:
 
 podman_job:
   stage: test
-  image: docker:20.10
-  services:
-    - docker:20.10-dind
+  image: opensuse/tumbleweed
+  # services:
+  #   - docker:20.10-dind
   needs:
     - base_iso_curl
   script:
-    # - zypper ref
-    # - zypper --non-interactive install -y podman runc tree docker
+    - zypper ref
+    - zypper --non-interactive install -y podman runc tree docker
     - ls -asl | grep *.iso
     - mkdir -p ./eib/base-images ./eib/logs ./eib/iso
     - cp SL-Micro-6.0-Packages-x86_64-GM.iso ./eib/base-images
-    # - export DOCKER_DRIVER=vfs  # Set the storage driver to vfs
-    # - |
-    #   echo '{"exec-opts": ["native.cgroupdriver=cgroupfs"], "cgroup-parent": "/sys/fs/cgroup"}' | tee /etc/docker/daemon.json
-    # - dockerd &
-    # - sleep 10  # Wait for the Docker daemon to start
-    # - docker info  # Verify Docker is running
+    - export DOCKER_DRIVER=vfs  # Set the storage driver to vfs
     - |
-      docker run --rm --privileged -v $(pwd)/eib:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.1 build --definition-file definition.yaml || true
+      echo '{"exec-opts": ["native.cgroupdriver=cgroupfs"], "cgroup-parent": "/sys/fs/cgroup"}' | tee /etc/docker/daemon.json
+    - dockerd &
+    - sleep 10  # Wait for the Docker daemon to start
+    - podman info  # Verify Docker is running
+    - |
+      podman run --rm --privileged -v $(pwd)/eib:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.1 build --definition-file definition.yaml || true
       tree ./eib
       cp ./eib/_build/build*/*.log ./eib/logs/
       cp ./eib/_build/build*/iso-extract/*.iso ./eib/iso/
