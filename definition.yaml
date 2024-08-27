@@ -2,7 +2,7 @@ apiVersion: 1.0
 image:
   arch: x86_64
   imageType: iso
-  baseImage: SLE-Micro.x86_64-5.5.0-Default-SelfInstall-Build9.2.install.iso 
+  baseImage: SL-Micro-6.0-Packages-x86_64-GM.iso
   outputImageName: ./out/basic.iso
 operatingSystem:
   isoConfiguration:
