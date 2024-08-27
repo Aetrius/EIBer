@@ -7,7 +7,7 @@ base_iso_curl:
   image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/curlimages/curl
   script:
     - |
-      curl --header "PRIVATE-TOKEN: $CI_JOB_TOKEN" --retry 5 --retry-connrefused --output SL-Micro-6.0-Packages-x86_64-GM.iso \
+      curl --header "PRIVATE-TOKEN: $PRIV_TOKEN" --retry 5 --retry-connrefused --output SL-Micro-6.0-Packages-x86_64-GM.iso \
       ""https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/6.0.0/SL-Micro-6.0-Packages-x86_64-GM.iso""
     - |
       file_size=$(stat -c%s SL-Micro-6.0-Packages-x86_64-GM.iso)
