@@ -22,8 +22,8 @@ podman_job:
     - base_iso_curl
   script:
     - zypper ref
-    - zypper install -y podman
-    - zypper install runc
+    - zypper --non-interactive install -y podman
+    - zypper --non-interactive install -y runc
     - podman run --rm --privileged --runtime=runc --cgroup-manager=cgroupfs -it -v .:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.1 build --definition-file ./definition.yaml
   artifacts:
     paths:
