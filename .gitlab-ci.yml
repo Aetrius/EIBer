@@ -6,14 +6,18 @@ base_iso_curl:
   stage: test
   image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/curlimages/curl
   script:
-  - |
-    curl --header "PRIVATE-TOKEN: $CI_JOB_TOKEN" --output SL-Micro-6.0-Packages-x86_64-GM.iso \
-    "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/6.0.0/SL-Micro-6.0-Packages-x86_64-GM.iso"
+    - |
+      curl --header "PRIVATE-TOKEN: $CI_JOB_TOKEN" --retry 5 --retry-connrefused --output SL-Micro-6.0-Packages-x86_64-GM.iso \
+      "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/6.0.0/SL-Micro-6.0-Packages-x86_64-GM.iso"
+    - |
+      if [ $(stat --format=%s SL-Micro-6.0-Packages-x86_64-GM.iso) -lt 1000000000 ]; then
+        echo "Error: The ISO file is smaller than expected."
+        exit 1
+      fi
   artifacts:
     paths:
       - SL-Micro-6.0-Packages-x86_64-GM.iso
     expire_in: 1 hour
-
 docker_in_docker_job:
   stage: test
   image: docker:20.10
