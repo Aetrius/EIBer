@@ -20,8 +20,7 @@ base_iso_curl:
     paths:
       - SL-Micro-6.0-Packages-x86_64-GM.iso.part-*
     expire_in: 1 hour
-
-
+    
 docker_in_docker_job:
   stage: test
   image: docker:20.10
@@ -32,6 +31,7 @@ docker_in_docker_job:
   script:
     - ls -asl | grep *.iso
     - mkdir -p ./eib/base-images ./eib/logs ./eib/iso
+    - cat SL-Micro-6.0-Packages-x86_64-GM.iso.part-* > SL-Micro-6.0-Packages-x86_64-GM.iso
     - cp SL-Micro-6.0-Packages-x86_64-GM.iso ./eib/base-images
     - dockerd &
     - sleep 10  # Wait for the Docker daemon to start
