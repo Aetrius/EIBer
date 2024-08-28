@@ -21,7 +21,7 @@ stages:
 #       - SL-Micro-6.0-Packages-x86_64-GM.iso.part-*
 #     expire_in: 1 hour
 podman_in_podman_job:
-  image: registry.opensuse.org/opensuse/leap:latest
+  image: registry.opensuse.org/opensuse/leap:15.5
   script:
     - zypper ref
     - zypper --non-interactive install -y tree curl crun tar gzip wget podman
