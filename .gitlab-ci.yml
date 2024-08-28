@@ -39,14 +39,15 @@ docker_in_docker_job:
     - docker info  # Verify Docker information
     - |
       docker run --rm --privileged -it -v $(pwd)/eib:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.2 build -definition-file definition.yaml -config-dir /eib -build-dir /eib/_build || true
-      tree ./eib
-      cp ./eib/_build/build*/*.log ./eib/logs/
-      # cp ./eib/_build/build*/iso-extract/*.iso ./eib/iso/
+      tree $(pwd)/eib
+      ls -R $(pwd)/eib/_build/  # List all files in the build directory
+      cp $(pwd)/eib/_build/build*/*.log .$(pwd)/eib/logs/
+      # cp $(pwd)/eib/_build/build*/iso-extract/*.iso $(pwd)/eib/iso/
     # - ls -asl ./eib/out/
   artifacts:
     paths:
       # - SL-Micro-6.0-Packages-x86_64-GM.iso
-      - ./eib/logs/*.log
+      - $(pwd)/eib/logs/*.log
       # - ./eib/iso/*.iso
     when: always
     expire_in: 1 hour
