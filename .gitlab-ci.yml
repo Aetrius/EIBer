@@ -17,9 +17,10 @@ podman_in_podman_job:
     - |
       # Update Podman configuration to set the correct runtime path
       mkdir -p /etc/containers
+      sed -i 's/runtime="crun"/runtime="runc"/' /etc/containers/containers.conf
     - cat /etc/containers/containers.conf  # Verify the configuration content
     - |
-      PODMAN_LOG_LEVEL=debug podman run --runtime /usr/bin/runc --security-opt label=disable --rm --privileged \
+      PODMAN_LOG_LEVEL=debug podman run --security-opt label=disable --rm --privileged \
       -v ./containers:/var/lib/containers:rw -v $(pwd)/eib:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.2 build --definition-file definition.yaml --config-dir /eib --build-dir /eib/_build || true
       tree ./eib
       cp ./eib/_build/build*/*.log ./eib/logs/
