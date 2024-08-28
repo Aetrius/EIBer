@@ -27,7 +27,7 @@ docker_in_docker_job:
   services:
     - docker:20.10-dind
   script:
-    - apk add --no-cache tree curl
+    - apk add --no-cache tree curl crun
     - mkdir -p ./eib/base-images ./eib/logs ./eib/iso
     - mkdir -p /logs
     - |
