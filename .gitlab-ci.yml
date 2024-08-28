@@ -35,13 +35,14 @@ podman_in_podman_job:
     - ls -asl ./eib/base-images
     - podman info  # Verify Podman information
     - |
-      # Run Podman inside Podman with specific configurations to handle cgroups and storage
-      podman run --rm --privileged \
-        --net=host \
-        --storage-driver=vfs
-        -v $(pwd)/eib:/eib \
-        registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.2 \
-        build --definition-file definition.yaml --config-dir /eib --build-dir /eib/_build || true
+      podman run \
+      --rm \
+      --privileged \
+      --net=host \
+      --storage-driver=vfs \
+      -v $(pwd)/eib:/eib \
+      registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.2 \
+      build --definition-file definition.yaml --config-dir /eib --build-dir /eib/_build || true
       tree ./eib
       cp ./eib/_build/build*/*.log ./eib/logs/
   artifacts:
@@ -49,4 +50,3 @@ podman_in_podman_job:
       - ./eib/logs/*.log
     when: always
     expire_in: 1 hour
-
