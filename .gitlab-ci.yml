@@ -26,16 +26,14 @@ podman_in_podman_job:
     name: registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.2
     entrypoint: [""]
   script:
-    - mkdir -p /eib/base-images
-    - cp ./eib/definition.yaml /eib/definition.yaml
+    - mkdir -p ./eib/base-images
     - |
-      curl -L --header "PRIVATE-TOKEN: $PRIV_TOKEN" --retry 5 --retry-connrefused --output SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso \
+      curl -L --header "PRIVATE-TOKEN: $PRIV_TOKEN" --retry 5 --retry-connrefused --output ./eib/base-images/SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso \
       "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/6.0.0/SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso"
     - cp SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso /eib/base-images
-    - eib build --definition-file definition.yaml || true
-    - ls -R /eib/_build
+    - eib build --definition-file definition.yaml --config-dir ./eib
   artifacts:
     paths:
-      - /eib/_build/build*/*.log
+      - ./eib/_build/build*/*.log
     when: always
     expire_in: 1 hour
