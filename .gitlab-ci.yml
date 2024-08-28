@@ -43,10 +43,10 @@ docker_in_docker_job:
       cp ./eib/_build/build*/*.log ./eib/logs/
       # cp ./eib/_build/build*/iso-extract/*.iso ./eib/iso/
     # - ls -asl ./eib/out/
-  artifacts:
-    paths:
-      # - SL-Micro-6.0-Packages-x86_64-GM.iso
-      - ./eib/logs/*.log
-      # - ./eib/iso/*.iso
-    when: always
-    expire_in: 1 hour
+  # artifacts:
+  #   paths:
+  #     # - SL-Micro-6.0-Packages-x86_64-GM.iso
+  #     # - ./eib/logs/*.log
+  #     # - ./eib/iso/*.iso
+  #   when: always
+  #   expire_in: 1 hour
