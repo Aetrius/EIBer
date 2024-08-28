@@ -27,6 +27,8 @@ podman_in_podman_job:
       PODMAN_LOG_LEVEL=debug podman run --security-opt label=disable --rm --privileged \
       -v ./containers:/var/lib/containers:rw -v $(pwd)/eib:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.2 build --definition-file definition.yaml --config-dir /eib --build-dir /eib/_build || true
       tree ./eib
+      ls -asl ./eib/_build/*/resolver-tarball-image/
+      ls -asl ./eib/_build/*/resolver-tarball-image/iso-root/
       cp ./eib/_build/build*/*.log ./eib/logs/
   artifacts:
     paths:
