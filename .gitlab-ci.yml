@@ -35,7 +35,6 @@ docker_in_docker_job:
     - crun --version || echo "crun not available"
     - which kata-runtime || echo "kata-runtime not found"
     - kata-runtime --version || echo "kata-runtime not available"
-    - echo -e "[engine]\nruntime = \"crun\"\n[runtimes.kata-runtime]\nruntime_path = \"/usr/bin/kata-runtime\"\n" | tee /etc/containers/containers.conf
     - echo -e "[storage]\ndriver = \"vfs\"\n" | tee -a /etc/containers/storage.conf
     - mkdir -p ./eib/base-images ./eib/logs ./eib/iso
     - mkdir -p /logs
