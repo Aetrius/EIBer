@@ -17,7 +17,6 @@ podman_in_podman_job:
     - |
       # Update Podman configuration to set the correct runtime path
       mkdir -p /etc/containers
-      echo -e "[engine]\nruntime = \"runc\"\n\n[[runtimes]]\nname = \"runc\"\npath = \"/usr/bin/runc\"" > /etc/containers/containers.conf
     - cat /etc/containers/containers.conf  # Verify the configuration content
     - |
       PODMAN_LOG_LEVEL=debug podman run --runtime /usr/bin/runc --security-opt label=disable --rm --privileged \
