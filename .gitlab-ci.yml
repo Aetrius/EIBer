@@ -37,10 +37,8 @@ podman_in_podman_job:
     - |
       # Run Podman inside Podman with specific configurations to handle cgroups and storage
       podman run --rm --privileged \
-        --cgroup-manager=cgroupfs \
-        --cgroupns=host \
-        --security-opt seccomp=unconfined \
-        --security-opt apparmor=unconfined \
+        --net=host \
+        --storage-driver=vfs
         -v $(pwd)/eib:/eib \
         registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.2 \
         build --definition-file definition.yaml --config-dir /eib --build-dir /eib/_build || true
