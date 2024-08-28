@@ -5,7 +5,8 @@ podman_in_podman_job:
   stage: test
   image: quay.io/podman/stable:latest
   script:
-    - dnf install -y curl tree runc  # Install curl and tree
+    # - dnf install -y curl tree runc  # Install curl and tree
+    - dnf install -y curl tree runc xorriso squashfs-tools e2fsprogs parted gdisk btrfs-progs lvm2 edk2-aarch64 podman createrepo_c helm
     - mkdir -p ./eib/base-images ./eib/logs ./eib/iso
     - mkdir -p /logs
     - mkdir -p ./containers
