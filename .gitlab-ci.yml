@@ -35,7 +35,7 @@ podman_in_podman_job:
     - ls -asl ./eib/base-images
     - podman info  # Verify Podman information
     - |
-      podman run --security-opt label=disable --user podman --rm --privileged --net=host -v $(pwd)/eib:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.2 build --definition-file definition.yaml --config-dir /eib --build-dir /eib/_build || true
+      podman run --security-opt label=disable --rm --privileged --net=host -v $(pwd)/eib:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.2 build --definition-file definition.yaml --config-dir /eib --build-dir /eib/_build || true
       tree ./eib
       cp ./eib/_build/build*/*.log ./eib/logs/
   artifacts:
