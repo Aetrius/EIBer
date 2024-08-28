@@ -29,6 +29,7 @@ podman_in_podman_job:
     - dnf install -y curl tree  # Install curl and tree
     - mkdir -p ./eib/base-images ./eib/logs ./eib/iso
     - mkdir -p /logs
+    - mkdir -p ./containers
     - |
       curl -L --header "PRIVATE-TOKEN: $PRIV_TOKEN" --retry 5 --retry-connrefused --output SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso \
       "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/6.0.0/SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso"
