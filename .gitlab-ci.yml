@@ -20,6 +20,8 @@ podman_in_podman_job:
       # Update Podman configuration to set the correct runtime path
       mkdir -p /etc/containers
       sed -i 's/runtime="crun"/runtime="runc"/' /etc/containers/containers.conf
+      sed -i 's/cgroups="disabled"/cgroups="enabled"/' /etc/containers/containers.conf
+
     - cat /etc/containers/containers.conf  # Verify the configuration content
     - |
       PODMAN_LOG_LEVEL=debug podman run --security-opt label=disable --rm --privileged \
