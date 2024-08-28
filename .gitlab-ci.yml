@@ -44,7 +44,7 @@ podman_in_podman_job:
     - sleep 10  # Wait for the Podman service to stabilize
     - podman info  # Verify Podman information
     - |
-      podman run --rm --privileged --cgroup-manager=cgroupfs --runtime=runc -v $(pwd)/eib:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.2 build -definition-file definition.yaml -config-dir /eib -build-dir /eib/_build || true
+      podman run --rm --privileged -it -v $(pwd)/eib:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.2 build -definition-file definition.yaml -config-dir /eib -build-dir /eib/_build || true
       tree ./eib
       cp ./eib/_build/build*/*.log ./eib/logs/
   artifacts:
