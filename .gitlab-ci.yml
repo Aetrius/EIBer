@@ -27,6 +27,7 @@ docker_in_docker_job:
   services:
     - docker:20.10-dind
   script:
+    - apk add --no-cache tree
     - ls -asl | grep *.iso
     - mkdir -p ./eib/base-images ./eib/logs ./eib/iso
     - |
@@ -40,8 +41,8 @@ docker_in_docker_job:
       docker run --rm --privileged -v $(pwd)/eib:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.2 build --definition-file definition.yaml || true
       tree ./eib
       cp ./eib/_build/build*/*.log ./eib/logs/
-      cp ./eib/_build/build*/iso-extract/*.iso ./eib/iso/
-    - ls -asl ./eib/out/
+      # cp ./eib/_build/build*/iso-extract/*.iso ./eib/iso/
+    # - ls -asl ./eib/out/
   artifacts:
     paths:
       # - SL-Micro-6.0-Packages-x86_64-GM.iso
