@@ -15,7 +15,7 @@ base_iso_curl:
         echo "Error: The ISO file is smaller than expected (only $file_size bytes)."
         exit 1
       fi
-    - split -b 100M SL-Micro-6.0-Packages-x86_64-GM.iso SL-Micro-6.0-Packages-x86_64-GM.iso.part-
+    - split -b 104857600 SL-Micro-6.0-Packages-x86_64-GM.iso SL-Micro-6.0-Packages-x86_64-GM.iso.part-
   artifacts:
     paths:
       - SL-Micro-6.0-Packages-x86_64-GM.iso.part-*
