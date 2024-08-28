@@ -25,7 +25,7 @@ podman_in_podman_job:
   image: registry.opensuse.org/opensuse/tumbleweed:latest
   script:
     - zypper ref
-    - zypper --non-interactive install -y tree curl crun tar gzip
+    - zypper --non-interactive install -y tree curl crun tar gzip wget
     - wget https://github.com/kata-containers/kata-containers/releases/download/2.4.1/kata-static-2.4.1-x86_64.tar.xz
     - tar -xvf kata-static-2.4.1-x86_64.tar.xz -C /
     - ln -sf /opt/kata/bin/kata-runtime /usr/bin/kata-runtime
