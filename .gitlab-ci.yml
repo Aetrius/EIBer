@@ -38,7 +38,6 @@ docker_in_docker_job:
     - sleep 10  # Wait for the Docker daemon to start
     - docker info  # Verify Docker information
     - |
-      # docker run --rm --privileged -v $(pwd)/eib:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.2 build --definition-file definition.yaml || true
       docker run --rm --privileged -it -v $(pwd)/eib:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.2 build -definition-file definition.yaml -config-dir /eib -build-dir /eib/_build || true
       tree ./eib
       cp ./eib/_build/build*/*.log ./eib/logs/
