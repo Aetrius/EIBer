@@ -36,4 +36,4 @@ operatingSystem:
       - url: https://download.opensuse.org/repositories/benchmark/SLE_15_SP5/
       - url: https://download.opensuse.org/repositories/network:/utilities/15.5/
       - url: https://download.opensuse.org/repositories/home:/atgracey:/sockperf/15.5/
-    sccRegistrationCode: INTERNAL-USE-ONLY-<snip>
+    sccRegistrationCode: 81A89BCD310EC226
