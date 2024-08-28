@@ -7,17 +7,18 @@ base_iso_curl:
   image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/curlimages/curl
   script:
     - |
-      curl --header "PRIVATE-TOKEN: $PRIV_TOKEN" --retry 5 --retry-connrefused --output SL-Micro-6.0-Packages-x86_64-GM.iso \
-      ""https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/6.0.0/SL-Micro-6.0-Packages-x86_64-GM.iso""
+      curl --header "PRIVATE-TOKEN: $CI_JOB_TOKEN" --retry 5 --retry-connrefused --output SL-Micro-6.0-Packages-x86_64-GM.iso \
+      "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/6.0.0/SL-Micro-6.0-Packages-x86_64-GM.iso"
     - |
       file_size=$(stat -c%s SL-Micro-6.0-Packages-x86_64-GM.iso)
       if [ "$file_size" -lt 1000000000 ]; then
         echo "Error: The ISO file is smaller than expected (only $file_size bytes)."
         exit 1
       fi
+    - split -b 100M SL-Micro-6.0-Packages-x86_64-GM.iso SL-Micro-6.0-Packages-x86_64-GM.iso.part-
   artifacts:
     paths:
-      - SL-Micro-6.0-Packages-x86_64-GM.iso
+      - SL-Micro-6.0-Packages-x86_64-GM.iso.part-*
     expire_in: 1 hour
 
 
@@ -36,7 +37,7 @@ docker_in_docker_job:
     - sleep 10  # Wait for the Docker daemon to start
     - docker info  # Verify Docker information
     - |
-      docker run --rm --privileged -v $(pwd)/eib:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.1 build --definition-file definition.yaml || true
+      docker run --rm --privileged -v $(pwd)/eib:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.2 build --definition-file definition.yaml || true
       tree ./eib
       cp ./eib/_build/build*/*.log ./eib/logs/
       cp ./eib/_build/build*/iso-extract/*.iso ./eib/iso/
