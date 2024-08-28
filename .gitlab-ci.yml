@@ -26,14 +26,14 @@ podman_in_podman_job:
   script:
     - zypper ref
     - zypper --non-interactive install -y tree curl crun tar gzip wget
-    - wget https://github.com/kata-containers/kata-containers/releases/download/2.4.1/kata-static-2.4.1-x86_64.tar.xz
-    - tar -xvf kata-static-2.4.1-x86_64.tar.xz -C /
-    - ln -sf /opt/kata/bin/kata-runtime /usr/bin/kata-runtime
-    - which crun || echo "crun not found"
-    - crun --version || echo "crun not available"
-    - which kata-runtime || echo "kata-runtime not found"
-    - kata-runtime --version || echo "kata-runtime not available"
-    - echo -e "[storage]\ndriver = \"vfs\"\nrunroot = \"/var/run/containers/storage\"\ngraphroot = \"/var/lib/containers/storage\"\n" > /etc/containers/storage.conf
+    # - wget https://github.com/kata-containers/kata-containers/releases/download/2.4.1/kata-static-2.4.1-x86_64.tar.xz
+    # - tar -xvf kata-static-2.4.1-x86_64.tar.xz -C /
+    # - ln -sf /opt/kata/bin/kata-runtime /usr/bin/kata-runtime
+    # - which crun || echo "crun not found"
+    # - crun --version || echo "crun not available"
+    # - which kata-runtime || echo "kata-runtime not found"
+    # - kata-runtime --version || echo "kata-runtime not available"
+    # - echo -e "[storage]\ndriver = \"vfs\"\nrunroot = \"/var/run/containers/storage\"\ngraphroot = \"/var/lib/containers/storage\"\n" > /etc/containers/storage.conf
     - mkdir -p ./eib/base-images ./eib/logs ./eib/iso
     - mkdir -p /logs
     - |
