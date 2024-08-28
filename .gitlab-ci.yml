@@ -30,9 +30,11 @@ docker_in_docker_job:
     - apk add --no-cache tree curl crun
     - which crun || echo "crun not found"
     - crun --version || echo "crun not available"
+    - mkdir -p /etc/containers
     - echo -e "[engine]\nruntime = \"crun\"" | tee /etc/containers/containers.conf
     - mkdir -p ./eib/base-images ./eib/logs ./eib/iso
     - mkdir -p /logs
+
     - |
       curl -L --header "PRIVATE-TOKEN: $PRIV_TOKEN" --retry 5 --retry-connrefused --output SL-Micro-6.0-Packages-x86_64-GM.iso \
       "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/6.0.0/SL-Micro-6.0-Packages-x86_64-GM.iso"
