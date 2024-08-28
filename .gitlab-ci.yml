@@ -23,6 +23,8 @@ stages:
 podman_in_podman_job:
   image: registry.suse.com/suse/sle15:15.5
   script:
+    - zypper ref
+    - zypper in -y podman
     - mkdir -p ./eib/base-images
     - |
       curl -L --header "PRIVATE-TOKEN: $PRIV_TOKEN" --retry 5 --retry-connrefused --output ./eib/base-images/SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso \
