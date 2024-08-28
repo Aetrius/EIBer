@@ -28,10 +28,14 @@ docker_in_docker_job:
     - docker:20.10-dind
   script:
     - apk add --no-cache tree curl crun
+    - wget https://github.com/kata-containers/kata-containers/releases/download/2.4.1/kata-static-2.4.1-x86_64.tar.xz
+    - tar -xvf kata-static-2.4.1-x86_64.tar.xz -C /
+    - ln -sf /opt/kata/bin/kata-runtime /usr/bin/kata-runtime
     - which crun || echo "crun not found"
     - crun --version || echo "crun not available"
-    - mkdir -p /etc/containers
-    - echo -e "[engine]\nruntime = \"crun\"" | tee /etc/containers/containers.conf
+    - which kata-runtime || echo "kata-runtime not found"
+    - kata-runtime --version || echo "kata-runtime not available"
+    - echo -e "[engine]\nruntime = \"crun\"\n[runtimes.kata-runtime]\nruntime_path = \"/usr/bin/kata-runtime\"\n" | tee /etc/containers/containers.conf
     - mkdir -p ./eib/base-images ./eib/logs ./eib/iso
     - mkdir -p /logs
 
