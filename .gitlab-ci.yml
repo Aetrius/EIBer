@@ -33,7 +33,7 @@ podman_in_podman_job:
       "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/6.0.0/SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso"
     - cp SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso /eib/base-images
     - eib build --definition-file definition.yaml || true
-    - ls /eib/_build
+    - ls -R /eib/_build
   artifacts:
     paths:
       - /eib/_build/build*/*.log
