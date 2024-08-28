@@ -22,7 +22,9 @@ stages:
 #     expire_in: 1 hour
 podman_in_podman_job:
   stage: test
-  image: registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.2
+  image: 
+    name: registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.2
+    entrypoint: [""]
   script:
     - mkdir -p ./eib/base-images ./eib/logs ./eib/iso
     - mkdir -p /logs
