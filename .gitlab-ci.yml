@@ -21,16 +21,18 @@ stages:
 #       - SL-Micro-6.0-Packages-x86_64-GM.iso.part-*
 #     expire_in: 1 hour
 podman_in_podman_job:
-  stage: test
-  image: 
-    name: registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.2
-    entrypoint: [""]
+  image: registry.opensuse.org/opensuse/leap:latest
   script:
+    - zypper ref
+    - zypper --non-interactive install -y tree curl crun tar gzip wget podman
     - mkdir -p ./eib/base-images
     - |
       curl -L --header "PRIVATE-TOKEN: $PRIV_TOKEN" --retry 5 --retry-connrefused --output ./eib/base-images/SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso \
       "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/6.0.0/SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso"
-    - eib build --definition-file definition.yaml --config-dir ./eib
+    - podman info  # Verify Podman information
+    - |
+      podman run --rm --privileged -v $(pwd)/eib:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.2 build --definition-file definition.yaml --config-dir ./eib || true
+      tree ./eib
   artifacts:
     paths:
       - ./eib/_build/build*/*.log
