@@ -27,7 +27,7 @@ docker_in_docker_job:
   services:
     - docker:20.10-dind
   script:
-    - apk add --no-cache tree curl crun
+    - apk add --no-cache tree curl crun podman
     - mkdir /etc/containers
     - wget https://github.com/kata-containers/kata-containers/releases/download/2.4.1/kata-static-2.4.1-x86_64.tar.xz
     - tar -xvf kata-static-2.4.1-x86_64.tar.xz -C /
@@ -44,11 +44,11 @@ docker_in_docker_job:
       "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/6.0.0/SL-Micro-6.0-Packages-x86_64-GM.iso"
     - cp SL-Micro-6.0-Packages-x86_64-GM.iso ./eib/base-images
     - ls -asl ./eib/base-images
-    - dockerd &
+    # - dockerd &
     - sleep 10  # Wait for the Docker daemon to start
     - docker info  # Verify Docker information
     - |
-      docker run --rm --privileged -v $(pwd)/eib:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.2 build -definition-file definition.yaml -config-dir /eib -build-dir /eib/_build || true
+      podman run --rm --privileged -v $(pwd)/eib:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.2 build -definition-file definition.yaml -config-dir /eib -build-dir /eib/_build || true
       tree ./eib
       cp ./eib/_build/build*/*.log ./eib/logs/
   artifacts:
