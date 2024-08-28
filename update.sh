@@ -1,5 +1,5 @@
 #!/bin/bash
-UPLOAD_TOKEN="glpat-Ss9Vv_cYW5M6ox56xEjk"
+UPLOAD_TOKEN=""
 BINARY_VERSION="5.5.0"
 curl -v -H \
   "PRIVATE-TOKEN: $UPLOAD_TOKEN" \
