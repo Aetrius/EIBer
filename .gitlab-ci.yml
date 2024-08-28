@@ -35,7 +35,6 @@ podman_in_podman_job:
     - ls -asl ./eib/base-images
     - |
       eib build --definition-file definition.yaml --config-dir ./eib --build-dir ./eib/_build || true
-      tree ./eib
       cp ./eib/_build/build*/*.log ./eib/logs/
   artifacts:
     paths:
