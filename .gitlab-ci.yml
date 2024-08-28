@@ -27,7 +27,6 @@ docker_in_docker_job:
   services:
     - docker:20.10-dind
   script:
-    - 
     - ls -asl | grep *.iso
     - mkdir -p ./eib/base-images ./eib/logs ./eib/iso
     - |
