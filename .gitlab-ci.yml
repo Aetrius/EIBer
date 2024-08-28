@@ -20,7 +20,7 @@ base_iso_curl:
     paths:
       - SL-Micro-6.0-Packages-x86_64-GM.iso.part-*
     expire_in: 1 hour
-    
+
 docker_in_docker_job:
   stage: test
   image: docker:20.10
@@ -43,7 +43,7 @@ docker_in_docker_job:
       cp ./eib/_build/build*/iso-extract/*.iso ./eib/iso/
   artifacts:
     paths:
-      - SL-Micro-6.0-Packages-x86_64-GM.iso
+      # - SL-Micro-6.0-Packages-x86_64-GM.iso
       - ./eib/logs/*.log
       - ./eib/iso/*.iso
     when: always
