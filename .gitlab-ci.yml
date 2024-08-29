@@ -4,7 +4,7 @@ stages:
 podman_in_podman_job:
   stage: test
   image: quay.io/podman/stable:latest
-  tags: ["docker"]
+  tags: ["podman"]
   script:
     - dnf install -y curl tree runc  # Install curl and tree
     - mkdir -p ./eib/base-images ./eib/logs ./eib/iso
