@@ -5,6 +5,8 @@ podman_in_podman_job:
   stage: test
   image: quay.io/podman/stable:latest
   tags: ["podman"]
+  variables:
+    FF_NETWORK_PER_BUILD: "false"
   before_script:
     - echo "$CI_JOB_TOKEN" | podman login registry.gitlab.com -u gitlab-ci-token --password-stdin
   script:
