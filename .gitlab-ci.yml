@@ -31,7 +31,7 @@ podman_in_podman_job:
     - |
       podman run --security-opt label=disable --rm --privileged \
       -v ./containers:/var/lib/containers:rw -v $(pwd)/eib:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.2 build --definition-file definition.yaml --config-dir /eib --build-dir /eib/_build || true
-      tree ./eib
+      tree ./eib |grep *.iso
       cp ./eib/_build/build*/*.log ./eib/logs/
     - |
       curl -v -H --header "PRIVATE-TOKEN: $PRIV_TOKEN" --upload-file "clustername-cp.iso" \
