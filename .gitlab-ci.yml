@@ -27,7 +27,7 @@ podman_in_podman_job:
       # UNCOMMENT FOR DEBUGGING LOG OUTPUT
       # cp ./eib/_build/build*/*.log ./eib/logs/
     - |
-      curl -v -H "PRIVATE-TOKEN: $PRIV_TOKEN" --upload-file "./eib/clustername-cp.iso" \
+      curl -v --retry 5 --retry-delay 10 -H "PRIVATE-TOKEN: $PRIV_TOKEN" --upload-file "./eib/clustername-cp.iso" \
       "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/5.5.0/clustername-cp.iso"
   # UNCOMMENT HERE FOR DEBUGGING
   # artifacts:
