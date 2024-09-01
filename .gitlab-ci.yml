@@ -48,7 +48,6 @@ docker_in_docker_job_with_docker_runner:
     - apk add --no-cache curl tree  # Install curl and tree for Alpine-based Docker image
     - mkdir -p ./eib/base-images ./eib/logs ./eib/iso
     - mkdir -p /logs
-    - mkdir -p ./containers
     - |
       curl -L --header "PRIVATE-TOKEN: $PRIV_TOKEN" --retry 5 --retry-connrefused --output ./eib/base-images/SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso \
       "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/5.5.0/SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso"
