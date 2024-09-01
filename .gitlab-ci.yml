@@ -1,7 +1,7 @@
 stages:
   - test
 
-podman_in_podman_job:
+podman_in_podman_job_with_podman_runner:
   stage: test
   image: quay.io/podman/stable:latest
   tags: ["podman"]
@@ -29,9 +29,35 @@ podman_in_podman_job:
     - |
       curl -v --retry 5 --retry-delay 10 -H "PRIVATE-TOKEN: $PRIV_TOKEN" --upload-file "./eib/clustername-cp.iso" \
       "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/5.5.0/clustername-cp.iso"
-  # UNCOMMENT HERE FOR DEBUGGING
-  # artifacts:
-  #   paths:
-  #     - ./eib/logs/*.log
-  #   when: always
-  #   expire_in: 1 hour
+
+
+docker_in_docker_job_with_docker_runner:
+  stage: test
+  image: docker:20.10  # Using Docker image for Docker-in-Docker
+  services:
+    - docker:20.10-dind  # Service for Docker Daemon in Docker
+  tags: ["docker"]
+  variables:
+    FF_NETWORK_PER_BUILD: "false"
+    DOCKER_DRIVER: overlay2
+  before_script:
+    - echo "$CI_JOB_TOKEN" | docker login registry.gitlab.com -u gitlab-ci-token --password-stdin
+  script:
+    - apk add --no-cache curl tree  # Install curl and tree for Alpine-based Docker image
+    - mkdir -p ./eib/base-images ./eib/logs ./eib/iso
+    - mkdir -p /logs
+    - mkdir -p ./containers
+    - |
+      curl -L --header "PRIVATE-TOKEN: $PRIV_TOKEN" --retry 5 --retry-connrefused --output ./eib/base-images/SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso \
+      "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/5.5.0/SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso"
+    - ls -asl ./eib/base-images
+    - docker info  # Verify Docker information
+    - |
+      docker run --rm --privileged \
+      -v ./containers:/var/lib/containers:rw -v $(pwd)/eib:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.2 build --definition-file definition.yaml --config-dir /eib --build-dir /eib/_build || true
+      tree ./eib
+      # UNCOMMENT FOR DEBUGGING LOG OUTPUT
+      # cp ./eib/_build/build*/*.log ./eib/logs/
+    - |
+      curl -v --retry 5 --retry-delay 10 -H "PRIVATE-TOKEN: $PRIV_TOKEN" --upload-file "./eib/clustername-cp.iso" \
+      "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/5.5.0/clustername-cp-docker.iso"
