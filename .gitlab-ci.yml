@@ -40,6 +40,8 @@ docker_in_docker_job_with_docker_runner:
   variables:
     FF_NETWORK_PER_BUILD: "false"
     DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ""  # Disable TLS to simplify the connection
+    DOCKER_HOST: tcp://docker:2375  # Use the Docker service alias
   before_script:
     - echo "$CI_JOB_TOKEN" | docker login registry.gitlab.com -u gitlab-ci-token --password-stdin
   script:
