@@ -17,7 +17,6 @@ podman_in_podman_job_with_podman_runner:
     - |
       curl -L --header "PRIVATE-TOKEN: $PRIV_TOKEN" --retry 5 --retry-connrefused --output ./eib/base-images/SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso \
       "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/5.5.0/SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso"
-      tree ./eib
     - ls -asl ./eib/base-images
     - podman info  # Verify Podman information
     - cat /etc/containers/containers.conf  # Verify the configuration content
@@ -47,19 +46,19 @@ docker_in_docker_job_with_docker_runner:
     - echo "$CI_JOB_TOKEN" | docker login registry.gitlab.com -u gitlab-ci-token --password-stdin
   script:
     - apk add --no-cache curl tree  # Install curl and tree for Alpine-based Docker image
-    - mkdir -p ./eib/base-images ./eib/logs ./eib/iso
+    - mkdir -p $(pwd)/eib/base-images $(pwd)/eib/logs $(pwd)/eib/iso $(pwd)/containers
     - mkdir -p /logs
     - |
-      curl -L --header "PRIVATE-TOKEN: $PRIV_TOKEN" --retry 5 --retry-connrefused --output ./eib/base-images/SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso \
+      curl -L --header "PRIVATE-TOKEN: $PRIV_TOKEN" --retry 5 --retry-connrefused --output $(pwd)/eib/base-images/SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso \
       "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/5.5.0/SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso"
-    - ls -asl ./eib/base-images
+    - ls -asl $(pwd)/eib/base-images
     - docker info  # Verify Docker information
     - |
       docker run --rm --privileged \
-      -v ./containers:/var/lib/containers:rw -v $(pwd)/eib:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.2 build --definition-file definition.yaml --config-dir /eib --build-dir /eib/_build || true
-      tree ./eib
+      -v $(pwd)/containers:/var/lib/containers:rw -v $(pwd)/eib:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.2 build --definition-file definition.yaml --config-dir /eib --build-dir /eib/_build || true
+      tree $(pwd)/eib
       # UNCOMMENT FOR DEBUGGING LOG OUTPUT
-      # cp ./eib/_build/build*/*.log ./eib/logs/
+      # cp $(pwd)/eib/_build/build*/*.log $(pwd)/eib/logs/
     - |
-      curl -v --retry 5 --retry-delay 10 -H "PRIVATE-TOKEN: $PRIV_TOKEN" --upload-file "./eib/clustername-cp.iso" \
+      curl -v --retry 5 --retry-delay 10 -H "PRIVATE-TOKEN: $PRIV_TOKEN" --upload-file "$(pwd)/eib/clustername-cp.iso" \
       "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/5.5.0/clustername-cp-docker.iso"
