@@ -13,6 +13,7 @@ podman_in_podman_job_with_podman_runner:
     - dnf install -y curl tree runc  # Install curl and tree
     - mkdir -p ./eib/base-images ./eib/logs ./eib/iso
     - mkdir -p ./containers
+    - mkdir -p /etc/containers
     - echo "Starting CURL OUTPUT" >> ./eib/logs/script.log
     - |
       curl -L --header "PRIVATE-TOKEN: $PRIV_TOKEN" --retry 5 --retry-connrefused --output ./eib/base-images/SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso \
