@@ -17,6 +17,7 @@ podman_in_podman_job_with_podman_runner:
     - |
       curl -L --header "PRIVATE-TOKEN: $PRIV_TOKEN" --retry 5 --retry-connrefused --output ./eib/base-images/SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso \
       "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/5.5.0/SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso"
+      tree ./eib
     - ls -asl ./eib/base-images
     - podman info  # Verify Podman information
     - cat /etc/containers/containers.conf  # Verify the configuration content
