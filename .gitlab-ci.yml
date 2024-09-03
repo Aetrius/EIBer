@@ -24,10 +24,8 @@ podman_in_podman_job_with_podman_runner:
     - |
       podman run --security-opt label=disable --rm --privileged \
       -v ./containers:/var/lib/containers:rw -v $(pwd)/eib:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.2 build --definition-file definition.yaml --config-dir /eib --build-dir /eib/_build || true
-      tree ./eib
-      # UNCOMMENT FOR DEBUGGING LOG OUTPUT
-      cp ./eib/_build/build*/*.log /logs/
-      
+    - tree ./eib
+    - cp ./eib/_build/build*/*.log /logs/  # Copy logs to /logs
     - |
       curl -v --retry 5 --retry-delay 10 -H "PRIVATE-TOKEN: $PRIV_TOKEN" --upload-file "./eib/clustername-cp.iso" \
       "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/5.5.0/clustername-cp.iso" || true
@@ -36,6 +34,7 @@ podman_in_podman_job_with_podman_runner:
       - /logs/*.log
     when: always
     expire_in: 1 hour
+
 
 
 docker_in_docker_job_with_docker_runner:
