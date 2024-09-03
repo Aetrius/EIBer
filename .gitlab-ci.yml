@@ -18,14 +18,21 @@ podman_in_podman_job_with_podman_runner:
       curl -L --header "PRIVATE-TOKEN: $PRIV_TOKEN" --retry 5 --retry-connrefused --output ./eib/base-images/SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso \
       "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/5.5.0/SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso"
     - ls -asl ./eib/base-images
+    - ls -l /usr/bin/runc
+    - chmod +x /usr/bin/runc
     - podman info  # Verify Podman information
+    - |
+      # Update Podman configuration to set the correct runtime path
+      mkdir -p /etc/containers
+      sed -i 's/runtime="crun"/runtime="runc"/' /etc/containers/containers.conf
+      sed -i 's/cgroups="disabled"/cgroups="enabled"/' /etc/containers/containers.conf
+
     - cat /etc/containers/containers.conf  # Verify the configuration content
     - |
       podman run --security-opt label=disable --rm --privileged \
       -v ./containers:/var/lib/containers:rw -v $(pwd)/eib:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.2 build --definition-file definition.yaml --config-dir /eib --build-dir /eib/_build || true
     - tree ./eib
-    # - cp ./eib/_build/build*/*.log /logs/  # Copy logs to /logs
-    - find ./eib -type f -name "*.log" -exec cp {} ./eib/logs/ \;
+    - cp ./eib/_build/build*/*.log ./eib/logs/
     - |
       curl -v -H "PRIVATE-TOKEN: $PRIV_TOKEN" --upload-file "./eib/clustername-cp.iso" \
       "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/5.5.0/clustername-cp-$CI_COMMIT_SHORT_SHA.iso" || true
@@ -59,12 +66,20 @@ docker_in_docker_job_with_docker_runner:
       curl -L --header "PRIVATE-TOKEN: $PRIV_TOKEN" --retry 5 --retry-connrefused --output $(pwd)/eib/base-images/SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso \
       "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/5.5.0/SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso"
     - ls -asl $(pwd)/eib/base-images
+    - ls -l /usr/bin/runc
+    - chmod +x /usr/bin/runc
     - docker info  # Verify Docker information
+    - |
+      # Update Docker configuration to set the correct runtime path
+      mkdir -p /etc/containers
+      sed -i 's/runtime="crun"/runtime="runc"/' /etc/containers/containers.conf
+      sed -i 's/cgroups="disabled"/cgroups="enabled"/' /etc/containers/containers.conf
     - |
       docker run --rm --privileged \
       -v $(pwd)/containers:/var/lib/containers:rw -v $(pwd)/eib:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.2 build --definition-file definition.yaml --config-dir /eib --build-dir /eib/_build || true
       tree $(pwd)/eib
-      find ./eib -type f -name "*.log" -exec cp {} $(pwd)/eib/logs/ \;
+      cp $(pwd)/eib/_build/build*/*.log $(pwd)/eib/logs/
+      #find ./eib -type f -name "*.log" -exec cp {} $(pwd)/eib/logs/ \;
     - |
       curl -v --retry 5 --retry-delay 10 -H "PRIVATE-TOKEN: $PRIV_TOKEN" --upload-file "$(pwd)/eib/clustername-cp.iso" \
       "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/5.5.0/clustername-cp-$CI_COMMIT_SHORT_SHA.iso" || true
