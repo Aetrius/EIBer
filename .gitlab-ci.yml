@@ -30,7 +30,7 @@ podman_in_podman_job_with_podman_runner:
       
     - |
       curl -v --retry 5 --retry-delay 10 -H "PRIVATE-TOKEN: $PRIV_TOKEN" --upload-file "./eib/clustername-cp.iso" \
-      "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/5.5.0/clustername-cp.iso"
+      "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/5.5.0/clustername-cp.iso" || true
   artifacts:
     paths:
       - /logs/*.log
@@ -68,7 +68,7 @@ docker_in_docker_job_with_docker_runner:
       cp $(pwd)/eib/_build/build*/*.log /logs
     - |
       curl -v --retry 5 --retry-delay 10 -H "PRIVATE-TOKEN: $PRIV_TOKEN" --upload-file "$(pwd)/eib/clustername-cp.iso" \
-      "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/5.5.0/clustername-cp-docker.iso"
+      "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/5.5.0/clustername-cp-docker.iso" || true
   artifacts:
     paths:
       - /logs/*.log
