@@ -1,53 +1,54 @@
 stages:
   - test
+  
+###  WORKING MODEL FOR PODMAN ###
+# podman_in_podman_job_with_podman_runner:
+#   stage: test
+#   image: quay.io/podman/stable:latest
+#   tags: ["podman"]
+#   variables:
+#     FF_NETWORK_PER_BUILD: "false"
+#   before_script:
+#     - echo "$CI_JOB_TOKEN" | podman login registry.gitlab.com -u gitlab-ci-token --password-stdin
+#   script:
+#     - dnf install -y curl tree runc  # Install curl and tree
+#     - mkdir -p ./eib/base-images ./eib/logs ./eib/iso
+#     - mkdir -p ./containers
+#     - echo "Starting CURL OUTPUT" >> ./eib/logs/script.log
+#     - |
+#       curl -L --header "PRIVATE-TOKEN: $PRIV_TOKEN" --retry 5 --retry-connrefused --output ./eib/base-images/SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso \
+#       "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/5.5.0/SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso"
+#     - ls -asl ./eib/base-images
+#     - ls -l /usr/bin/runc
+#     - chmod +x /usr/bin/runc
+#     - podman info  # Verify Podman information
+#     - |
+#       # Update Podman configuration to set the correct runtime path
+#       mkdir -p /etc/containers
+#       sed -i 's/runtime="crun"/runtime="runc"/' /etc/containers/containers.conf
+#       sed -i 's/cgroups="disabled"/cgroups="enabled"/' /etc/containers/containers.conf
 
-podman_in_podman_job_with_podman_runner:
-  stage: test
-  image: quay.io/podman/stable:latest
-  tags: ["podman"]
-  variables:
-    FF_NETWORK_PER_BUILD: "false"
-  before_script:
-    - echo "$CI_JOB_TOKEN" | podman login registry.gitlab.com -u gitlab-ci-token --password-stdin
-  script:
-    - dnf install -y curl tree runc  # Install curl and tree
-    - mkdir -p ./eib/base-images ./eib/logs ./eib/iso
-    - mkdir -p ./containers
-    - echo "Starting CURL OUTPUT" >> ./eib/logs/script.log
-    - |
-      curl -L --header "PRIVATE-TOKEN: $PRIV_TOKEN" --retry 5 --retry-connrefused --output ./eib/base-images/SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso \
-      "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/5.5.0/SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso"
-    - ls -asl ./eib/base-images
-    - ls -l /usr/bin/runc
-    - chmod +x /usr/bin/runc
-    - podman info  # Verify Podman information
-    - |
-      # Update Podman configuration to set the correct runtime path
-      mkdir -p /etc/containers
-      sed -i 's/runtime="crun"/runtime="runc"/' /etc/containers/containers.conf
-      sed -i 's/cgroups="disabled"/cgroups="enabled"/' /etc/containers/containers.conf
-
-    - cat /etc/containers/containers.conf  # Verify the configuration content
-    - |
-      podman run --security-opt label=disable --rm --privileged \
-      -v ./containers:/var/lib/containers:rw -v $(pwd)/eib:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.2 build --definition-file definition.yaml --config-dir /eib --build-dir /eib/_build || true
-    - tree ./eib
-    - cp ./eib/_build/build*/*.log ./eib/logs/
-    - |
-      curl -v -H "PRIVATE-TOKEN: $PRIV_TOKEN" --upload-file "./eib/clustername-cp.iso" \
-      "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/5.5.0/clustername-cp-$CI_COMMIT_SHORT_SHA.iso" || true
-  artifacts:
-    paths:
-      - ./eib/logs/*.log
-    when: always
-    expire_in: 1 hour
+#     - cat /etc/containers/containers.conf  # Verify the configuration content
+#     - |
+#       podman run --security-opt label=disable --rm --privileged \
+#       -v ./containers:/var/lib/containers:rw -v $(pwd)/eib:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:1.0.2 build --definition-file definition.yaml --config-dir /eib --build-dir /eib/_build || true
+#     - tree ./eib
+#     - cp ./eib/_build/build*/*.log ./eib/logs/
+#     - |
+#       curl -v -H "PRIVATE-TOKEN: $PRIV_TOKEN" --upload-file "./eib/clustername-cp.iso" \
+#       "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/5.5.0/clustername-cp-$CI_COMMIT_SHORT_SHA.iso" || true
+#   artifacts:
+#     paths:
+#       - ./eib/logs/*.log
+#     when: always
+#     expire_in: 1 hour
 
 docker_in_docker_job_with_docker_runner:
   stage: test
   image: docker:20.10  # Using Docker image for Docker-in-Docker
   services:
     - docker:20.10-dind  # Service for Docker Daemon in Docker
-  # tags: ["docker"]
+  # tags: ["docker"] #works natively on gitlab runners
   variables:
     FF_NETWORK_PER_BUILD: "false"
     DOCKER_DRIVER: overlay2
