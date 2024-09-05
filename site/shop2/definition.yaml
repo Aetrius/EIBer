@@ -1,0 +1,39 @@
+apiVersion: 1.0
+image:
+  imageType: iso
+  arch: x86_64
+  baseImage: SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso
+  outputImageName: clustername-cp.iso
+operatingSystem:
+  isoConfiguration:
+    installDevice: /dev/sda
+  time:
+    timezone: America/Chicago
+    ntp:
+      forceWait: true
+      servers:
+        - 82.219.4.30
+  keymap: us
+  users:
+    - username: root
+      encryptedPassword: <snip>
+  # packages:
+  #   packageList:
+  #     - nfs-client
+  #     - nfs-kernel-server
+  #     - rpcbind
+  #     - mdadm
+  #     - multipath-tools
+  #     - gptfdisk
+  #     - device-mapper
+  #     - iperf
+  #     - lksctp-tools
+  #     - netperf
+  #     - sockperf
+  #     - ethtool
+  #     - open-vm-tools
+  #   additionalRepos:
+  #     - url: https://download.opensuse.org/repositories/benchmark/SLE_15_SP5/
+  #     - url: https://download.opensuse.org/repositories/network:/utilities/15.5/
+  #     - url: https://download.opensuse.org/repositories/home:/atgracey:/sockperf/15.5/
+  #   sccRegistrationCode: 81A89BCD310EC226
