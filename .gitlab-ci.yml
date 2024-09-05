@@ -43,8 +43,8 @@ variables:
     - tree $(pwd)/eib
     - cp ./eib/_build/build*/*.log ./eib/logs/
     - |
-      curl -v --retry 5 --retry-delay 10 -H "PRIVATE-TOKEN: $PRIV_TOKEN" --upload-file "$(pwd)/eib/${CUSTOM_OUTPUT_IMAGE_NAME}" \
-      "${GITLAB_ISO_OUTPUT_PATH}/${CUSTOM_OUTPUT_IMAGE_NAME}-$CI_COMMIT_SHORT_SHA.iso" || true
+      curl -v --retry 5 --retry-delay 10 -H "PRIVATE-TOKEN: $PRIV_TOKEN" --upload-file "$(pwd)/eib/${CUSTOM_OUTPUT_IMAGE_NAME}.iso" \
+      "${GITLAB_ISO_OUTPUT_PATH}/${CUSTOM_OUTPUT_IMAGE_NAME}_$CI_COMMIT_SHORT_SHA.iso" || true
   artifacts:
     paths:
       - ./eib/logs/*.log
@@ -57,7 +57,7 @@ build_iso_site_shop1:
   variables:
     BASE_FOLDER: "site/shop1"  # Override the base folder path for this job
     IMAGE_VERSION: "1.0.2"  # Specify the Edge Image Builder version
-    CUSTOM_OUTPUT_IMAGE_NAME: "shop1_output.iso" 
+    CUSTOM_OUTPUT_IMAGE_NAME: "shop1_output" 
     OUTPUT_IMAGE_NAME: "SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso" 
 
 # Job for building ISO for Site/Shop2

@@ -3,7 +3,7 @@ image:
   imageType: iso
   arch: x86_64
   baseImage: BASE_IMAGE_NAME
-  outputImageName: CUSTOM_OUTPUT_IMAGE_NAME
+  outputImageName: CUSTOM_OUTPUT_IMAGE_NAME.iso
 operatingSystem:
   isoConfiguration:
     installDevice: /dev/sda
