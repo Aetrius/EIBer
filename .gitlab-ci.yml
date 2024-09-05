@@ -1,6 +1,6 @@
 stages:
   - test
-  
+
 ###  WORKING MODEL FOR PODMAN ###
 # podman_in_podman_job_with_podman_runner:
 #   stage: test
@@ -45,10 +45,9 @@ stages:
 
 docker_in_docker_job_with_docker_runner:
   stage: test
-  image: docker:20.10  # Using Docker image for Docker-in-Docker
+  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:20.10  # Using Docker image for Docker-in-Docker
   services:
-    - docker:20.10-dind  # Service for Docker Daemon in Docker
-  # tags: ["docker"] #works natively on gitlab runners
+    - ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:20.10-dind  # Service for Docker Daemon in Docker
   variables:
     FF_NETWORK_PER_BUILD: "false"
     DOCKER_DRIVER: overlay2
