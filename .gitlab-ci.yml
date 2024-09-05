@@ -41,7 +41,7 @@ variables:
     - tree $(pwd)/eib
     - cp ./eib/_build/build*/*.log ./eib/logs/
     - |
-      curl -v --retry 5 --retry-delay 10 -H "PRIVATE-TOKEN: $PRIV_TOKEN" --upload-file "$(pwd)/eib/${OUTPUT_IMAGE_NAME}" \
+      curl -v --retry 5 --retry-delay 10 -H "PRIVATE-TOKEN: $PRIV_TOKEN" --upload-file "$(pwd)/eib/${CUSTOM_OUTPUT_IMAGE_NAME}" \
       "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/5.5.0/${CUSTOM_OUTPUT_IMAGE_NAME}-$CI_COMMIT_SHORT_SHA.iso" || true
   artifacts:
     paths:
