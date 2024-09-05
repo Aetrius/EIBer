@@ -1,0 +1,19 @@
+apiVersion: 1.0
+image:
+  imageType: iso
+  arch: x86_64
+  baseImage: BASE_IMAGE_NAME
+  outputImageName: CUSTOM_OUTPUT_IMAGE_NAME.iso
+operatingSystem:
+  isoConfiguration:
+    installDevice: /dev/sda
+  time:
+    timezone: America/Chicago
+    ntp:
+      forceWait: true
+      servers:
+        - 82.219.4.30
+  keymap: us
+  users:
+    - username: root
+      encryptedPassword: <snip>
