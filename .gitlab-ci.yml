@@ -7,6 +7,7 @@ variables:
   IMAGE_VERSION: "1.0.2"  # Default Edge Image Builder version
   CUSTOM_OUTPUT_IMAGE_NAME: "custom_output.iso"  # Default output image name
   OUTPUT_IMAGE_NAME: "SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso"  # Default output image name
+  BASE_IMAGE_NAME: "SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso"
 
 # Template job for building ISOs
 .build_iso_template:
