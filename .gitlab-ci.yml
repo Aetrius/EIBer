@@ -54,7 +54,7 @@ build_iso_site_shop1:
   variables:
     BASE_FOLDER: "site/shop1"  # Override the base folder path for this job
     IMAGE_VERSION: "1.0.2"  # Specify the Edge Image Builder version
-    OUTPUT_IMAGE_NAME: "shop1_output.iso" 
+    CUSTOM_OUTPUT_IMAGE_NAME: "shop1_output.iso" 
     OUTPUT_IMAGE_NAME: "SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso" 
 
 # Job for building ISO for Site/Shop2
@@ -63,7 +63,7 @@ build_iso_site_shop2:
   variables:
     BASE_FOLDER: "site/shop2"  # Override the base folder path for this job
     IMAGE_VERSION: "1.0.1"  # Use a different version of the Edge Image Builder
-    OUTPUT_IMAGE_NAME: "shop2_output.iso"
+    CUSTOM_OUTPUT_IMAGE_NAME: "shop2_output.iso"
     OUTPUT_IMAGE_NAME: "SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso" 
 
 # stages:
