@@ -28,7 +28,7 @@ variables:
     - mkdir -p /logs
     - mv ${BASE_FOLDER}/* ./eib/
     - echo "Starting CURL OUTPUT" >> ./eib/logs/script.log
-    - find ./eib/ -type f -exec sed -i "s/OUTPUT_IMAGE_NAME/${OUTPUT_IMAGE_NAME}/g" {} +
+    - find ./eib/ -type f -exec sed -i "s/CUSTOM_OUTPUT_IMAGE_NAME/${CUSTOM_OUTPUT_IMAGE_NAME}/g" {} +
     - find ./eib/ -type f -exec sed -i "s/BASE_IMAGE_NAME/${BASE_IMAGE_NAME}/g" {} +
     - |
       curl -L --header "PRIVATE-TOKEN: $PRIV_TOKEN" --retry 5 --retry-connrefused --output $(pwd)/eib/base-images/${OUTPUT_IMAGE_NAME} \
