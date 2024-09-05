@@ -54,6 +54,9 @@ variables:
       - ./eib/logs/*.log
     when: always
     expire_in: 1 hour
+  only:
+    changes:
+      - site/**/*
 
 # Job for building ISO for Site/Shop1
 build_iso_site_shop1:
