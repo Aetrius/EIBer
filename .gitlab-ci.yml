@@ -47,7 +47,7 @@ docker_in_docker_job_with_docker_runner:
   stage: test
   image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:20.10  # Using Docker image for Docker-in-Docker
   services:
-    - ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:20.10-dind  # Service for Docker Daemon in Docker
+    - docker:20.10-dind  # Service for Docker Daemon in Docker
   variables:
     FF_NETWORK_PER_BUILD: "false"
     DOCKER_DRIVER: overlay2
