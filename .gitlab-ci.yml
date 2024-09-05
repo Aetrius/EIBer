@@ -36,7 +36,7 @@ variables:
     - docker info
     - |
       docker run --rm --privileged \
-      -v $(pwd)/containers:/var/lib/containers:rw -v $(pwd)/eib:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:${IMAGE_VERSION} build --definition-file /eib/definition.yaml --config-dir /eib --build-dir /eib/_build || true
+      -v $(pwd)/containers:/var/lib/containers:rw -v $(pwd)/eib:/eib registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:${IMAGE_VERSION} build --definition-file definition.yaml --config-dir /eib --build-dir /eib/_build || true
     - tree $(pwd)/eib
     - cp ./eib/_build/build*/*.log ./eib/logs/
     - |
