@@ -1,93 +1,96 @@
 # EIBer - Edge Image Builder
 
+This repository contains a boilerplate configuration for Gitlab CICD / Repository for building custom ISO images using the SUSE Edge Image Builder. The pipeline is designed to automate the process of downloading base ISO images, modifying configuration files, and building new ISO images tailored for different sites or shops. This setup allows multiple ISOs to be built at the same time.
 
+## Pipeline Stages
 
-## Getting started
+The pipeline consists of a single stage, you can update the pipeline to handle stages for pushing or testing components:
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+- **build_iso**: This stage is responsible for creating ISO images for different sites or shops. Each job in this stage uses a template to perform the following actions:
+  - Download the base ISO image.
+  - Customize the configuration based on specific variables.
+  - Build the new ISO image.
+  - Upload the resulting ISO image to a GitLab package registry.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+## Global Variables
 
-## Add your files
+The pipeline defines several global variables that can be overridden for different jobs:
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+- **GITLAB_API_V4_URL**: The base URL for the GitLab API (constructed dynamically using the project ID).
+- **BASE_FOLDER**: The default base folder path containing site/shop-specific files (`site/shop`).
+- **IMAGE_VERSION**: The version of the Edge Image Builder to use (`1.0.2`).
+- **CUSTOM_OUTPUT_IMAGE_NAME**: The name for the custom output ISO image (`custom_output.iso`).
+- **OUTPUT_IMAGE_NAME**: The default output image name (`SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso`).
+- **BASE_IMAGE_NAME**: The name of the base image to use (`SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso`).
+- **GOLDEN_IMAGE_ISO_PATH**: The path to the base ISO image in the GitLab package registry.
+- **GITLAB_ISO_OUTPUT_PATH**: The output path for storing the built ISO image in the GitLab package registry.
+- **SUSE_REGISTRY_CODE**: The SUSE registry code (this should be provided as an environment variable). Contact SUSE for a registry code, you can make a free account for a trial code.
 
-```
-cd existing_repo
-git remote add origin https://gitlab.com/sre-baremetal/EIBer.git
-git branch -M main
-git push -uf origin main
-```
+## Template Job for Building ISOs
 
-## Integrate with your tools
+### `.build_iso_template`
 
-- [ ] [Set up project integrations](https://gitlab.com/sre-baremetal/EIBer/-/settings/integrations)
+The template job `.build_iso_template` is used to define the steps required to build an ISO image. It includes:
 
-## Collaborate with your team
+1. **Preparing the environment**:
+   - Install necessary tools like `curl` and `tree`.
+   - Create required directories.
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+2. **Downloading the Base ISO**:
+   - Use `curl` to download the base ISO image from the GitLab package registry.
 
-## Test and Deploy
+3. **Customizing Configuration Files**:
+   - Replace placeholders in configuration files with specified variables, such as `CUSTOM_OUTPUT_IMAGE_NAME`, `BASE_IMAGE_NAME`, and `SUSE_REGISTRY_CODE`.
 
-Use the built-in continuous integration in GitLab.
+4. **Building the ISO**:
+   - Use Docker to run the SUSE Edge Image Builder container and build the new ISO image based on the provided configuration.
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+5. **Uploading the Built ISO**:
+   - Upload the resulting ISO image to the GitLab package registry.
 
-***
+6. **Storing Logs**:
+   - Collect and store logs as artifacts for later analysis.
 
-# Editing this README
+## Specific Jobs for Different Sites or Shops
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+The pipeline defines several jobs that extend from the `.build_iso_template` to create ISO images for specific sites or shops, a few examples are below:
 
-## Suggestions for a good README
+### `build_iso_site_shop1`
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+- **Base Folder**: `site/shop1`
+- **Custom Output Image Name**: `shop1_output.iso`
+- **Edge Image Builder Version**: `1.0.2`
 
-## Name
-Choose a self-explaining name for your project.
+### `build_iso_site_shop2`
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+- **Base Folder**: `site/shop2`
+- **Custom Output Image Name**: `shop2_output.iso`
+- **Edge Image Builder Version**: `1.0.2`
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+### `build_iso_site_shop3`
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+- **Base Folder**: `site/shop3`
+- **Custom Output Image Name**: `shop3_output.iso`
+- **Edge Image Builder Version**: `1.0.2`
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+## How to Use
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+To use this pipeline:
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+1. **Set up the necessary environment variables**:
+   Ensure you have the required variables, such as `SUSE_REGISTRY_CODE` and `PRIV_TOKEN`, set in your GitLab CI/CD settings or secret variables. PRIV_TOKEN is just a Gitlab Registry token to handle uploading or downloading from the gitlab registry.
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+2. **Run the Pipeline**:
+   The pipeline can be triggered manually or automatically based on your GitLab project's configuration.
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+3. **Monitor the Jobs**:
+   View the job logs and artifacts to monitor the progress and results of the ISO-building process.
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+## Artifacts
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+Each job generates log files that are stored as artifacts for troubleshooting and record-keeping purposes. The artifacts are set to expire in 1 hour by default.
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+## Sample Statistics
 
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+Base Shops with just a definition.yaml and no SUSE repository access on a regular gitlab runner takes ~ 7 minutes to build.
+Custom Shops with a definition.yaml and SUSE repository access with multiple binaries takes ~20 minutes to build.
