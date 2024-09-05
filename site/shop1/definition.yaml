@@ -3,7 +3,7 @@ image:
   imageType: iso
   arch: x86_64
   baseImage: SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso
-  outputImageName: clustername-cp.iso
+  outputImageName: OUTPUT_IMAGE_NAME
 operatingSystem:
   isoConfiguration:
     installDevice: /dev/sda

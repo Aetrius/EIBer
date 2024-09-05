@@ -5,7 +5,8 @@ stages:
 variables:
   BASE_FOLDER: "site/shop"  # Default base folder path
   IMAGE_VERSION: "1.0.2"  # Default Edge Image Builder version
-  OUTPUT_IMAGE_NAME: "custom_output.iso"  # Default output image name
+  CUSTOM_OUTPUT_IMAGE_NAME: "custom_output.iso"  # Default output image name
+  OUTPUT_IMAGE_NAME: "SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso"  # Default output image name
 
 # Template job for building ISOs
 .build_iso_template:
@@ -27,9 +28,10 @@ variables:
     - cp -r ${BASE_FOLDER}/* $(pwd)/eib/
     - echo "Starting CURL OUTPUT" >> ./eib/logs/script.log
     - find ./eib/ -type f -exec sed -i "s/OUTPUT_IMAGE_NAME/${OUTPUT_IMAGE_NAME}/g" {} +
+    - find ./eib/ -type f -exec sed -i "s/BASE_IMAGE_NAME/${BASE_IMAGE_NAME}/g" {} +
     - |
-      curl -L --header "PRIVATE-TOKEN: $PRIV_TOKEN" --retry 5 --retry-connrefused --output $(pwd)/eib/base-images/SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso \
-      "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/5.5.0/SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso"
+      curl -L --header "PRIVATE-TOKEN: $PRIV_TOKEN" --retry 5 --retry-connrefused --output $(pwd)/eib/base-images/${OUTPUT_IMAGE_NAME} \
+      "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/5.5.0/${OUTPUT_IMAGE_NAME}"
     - ls -asl $(pwd)/eib/base-images
     - docker info
     - |
@@ -38,8 +40,8 @@ variables:
     - tree $(pwd)/eib
     - cp $(pwd)/eib/_build/build*/*.log $(pwd)/eib/logs/
     - |
-      curl -v --retry 5 --retry-delay 10 -H "PRIVATE-TOKEN: $PRIV_TOKEN" --upload-file "$(pwd)/eib/clustername-cp.iso" \
-      "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/5.5.0/clustername-cp-$CI_COMMIT_SHORT_SHA.iso" || true
+      curl -v --retry 5 --retry-delay 10 -H "PRIVATE-TOKEN: $PRIV_TOKEN" --upload-file "$(pwd)/eib/${OUTPUT_IMAGE_NAME}" \
+      "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/5.5.0/${CUSTOM_OUTPUT_IMAGE_NAME}-$CI_COMMIT_SHORT_SHA.iso" || true
   artifacts:
     paths:
       - $(pwd)/eib/logs/*.log
@@ -53,6 +55,7 @@ build_iso_site_shop1:
     BASE_FOLDER: "site/shop1"  # Override the base folder path for this job
     IMAGE_VERSION: "1.0.2"  # Specify the Edge Image Builder version
     OUTPUT_IMAGE_NAME: "shop1_output.iso" 
+    OUTPUT_IMAGE_NAME: "SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso" 
 
 # Job for building ISO for Site/Shop2
 build_iso_site_shop2:
@@ -60,7 +63,8 @@ build_iso_site_shop2:
   variables:
     BASE_FOLDER: "site/shop2"  # Override the base folder path for this job
     IMAGE_VERSION: "1.0.1"  # Use a different version of the Edge Image Builder
-    OUTPUT_IMAGE_NAME: "shop2_output.iso" 
+    OUTPUT_IMAGE_NAME: "shop2_output.iso"
+    OUTPUT_IMAGE_NAME: "SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso" 
 
 # stages:
 #   - build_iso
