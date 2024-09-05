@@ -25,7 +25,7 @@ variables:
     - apk add --no-cache curl tree
     - mkdir -p $(pwd)/eib/base-images $(pwd)/eib/logs $(pwd)/eib/iso $(pwd)/containers /logs
     - mkdir -p /logs
-    - cp -r ${BASE_FOLDER}/* $(pwd)/eib/
+    - mv ${BASE_FOLDER}/* ./eib/
     - echo "Starting CURL OUTPUT" >> ./eib/logs/script.log
     - find ./eib/ -type f -exec sed -i "s/OUTPUT_IMAGE_NAME/${OUTPUT_IMAGE_NAME}/g" {} +
     - find ./eib/ -type f -exec sed -i "s/BASE_IMAGE_NAME/${BASE_IMAGE_NAME}/g" {} +
