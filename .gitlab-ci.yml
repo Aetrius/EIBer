@@ -29,7 +29,7 @@ variables:
     - echo "$CI_JOB_TOKEN" | docker login registry.gitlab.com -u gitlab-ci-token --password-stdin
   script:
     - apk add --no-cache curl tree
-    - mkdir -p $(pwd)/eib/base-images $(pwd)/eib/logs $(pwd)/eib/iso $(pwd)/containers /logs
+    - mkdir -p $(pwd)/eib $(pwd)/eib/base-images $(pwd)/eib/logs $(pwd)/eib/iso $(pwd)/containers /logs
     - mv ${BASE_FOLDER}/* ./eib/
     - echo "Starting CURL OUTPUT" >> ./eib/logs/script.log
     - find ./eib/ -type f -exec sed -i "s/CUSTOM_OUTPUT_IMAGE_NAME/${CUSTOM_OUTPUT_IMAGE_NAME}/g" {} +
