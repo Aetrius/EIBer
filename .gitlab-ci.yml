@@ -8,6 +8,8 @@ variables:
   CUSTOM_OUTPUT_IMAGE_NAME: "custom_output.iso"  # Default output image name
   OUTPUT_IMAGE_NAME: "SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso"  # Default output image name
   BASE_IMAGE_NAME: "SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso"
+  GOLDEN_IMAGE_ISO_PATH: "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/5.5.0/SLE-Micro.x86_64-5.5.0-Default-RT-SelfInstall-GM2.install.iso"
+  GITLAB_ISO_OUTPUT_PATH: "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/5.5.0"
 
 # Template job for building ISOs
 .build_iso_template:
@@ -32,7 +34,7 @@ variables:
     - find ./eib/ -type f -exec sed -i "s/BASE_IMAGE_NAME/${BASE_IMAGE_NAME}/g" {} +
     - |
       curl -L --header "PRIVATE-TOKEN: $PRIV_TOKEN" --retry 5 --retry-connrefused --output $(pwd)/eib/base-images/${OUTPUT_IMAGE_NAME} \
-      "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/5.5.0/${OUTPUT_IMAGE_NAME}"
+      "${GOLDEN_IMAGE_ISO_PATH}"
     - ls -asl $(pwd)/eib/base-images
     - docker info
     - |
@@ -42,7 +44,7 @@ variables:
     - cp ./eib/_build/build*/*.log ./eib/logs/
     - |
       curl -v --retry 5 --retry-delay 10 -H "PRIVATE-TOKEN: $PRIV_TOKEN" --upload-file "$(pwd)/eib/${CUSTOM_OUTPUT_IMAGE_NAME}" \
-      "https://gitlab.com/api/v4/projects/61162578/packages/generic/suse_enterprise/5.5.0/${CUSTOM_OUTPUT_IMAGE_NAME}-$CI_COMMIT_SHORT_SHA.iso" || true
+      "${GITLAB_ISO_OUTPUT_PATH}/${CUSTOM_OUTPUT_IMAGE_NAME}-$CI_COMMIT_SHORT_SHA.iso" || true
   artifacts:
     paths:
       - ./eib/logs/*.log
