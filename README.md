@@ -2,7 +2,9 @@
 
 This repository contains a boilerplate configuration for Gitlab CICD / Repository for building custom ISO images using the SUSE Edge Image Builder. The pipeline is designed to automate the process of downloading base ISO images, modifying configuration files, and building new ISO images tailored for different sites or shops. This setup allows multiple ISOs to be built at the same time.
 
-## Pipeline Stages
+** This repository is mirrored from a Private Gitlab Repository by @Aetrius. The Gitlab CICD Pipelines are based on that project.
+
+## GITLAB Pipeline Stages
 
 The pipeline consists of a single stage, you can update the pipeline to handle stages for pushing or testing components:
 
