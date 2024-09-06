@@ -19,6 +19,7 @@ variables:
 .build_iso_template:
   stage: build_iso
   image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:20.10
+  tags: ["docker"]
   services:
     - docker:20.10-dind
   variables:

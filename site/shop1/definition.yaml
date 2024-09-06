@@ -12,7 +12,7 @@ operatingSystem:
     ntp:
       forceWait: true
       servers:
-        - 82.219.4.30
+        - 172.16.0.3
   keymap: us
   users:
     - username: root
