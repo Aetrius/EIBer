@@ -63,7 +63,6 @@ variables:
 .build_iso_template_with_kaniko:
   stage: build_iso
   image: gcr.io/kaniko-project/executor:debug
-  entrypoint: [""]
   tags: ["p-aether"] # use your GitLab Runner tag
   variables:
     DOCKER_CONFIG: /kaniko/.docker
