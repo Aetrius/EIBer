@@ -72,7 +72,8 @@ variables:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_JOB_TOKEN\"}}}" > /kaniko/.docker/config.json
   script:
     # 🔨 Step 1: Build the image using Kaniko
-    - /kaniko/executor \
+    - |
+      /kaniko/executor \
         --context $CI_PROJECT_DIR \
         --dockerfile $CI_PROJECT_DIR/Dockerfile \
         --destination $IMAGE_TAG \
@@ -91,14 +92,16 @@ variables:
         --output ./eib/base-images/${OUTPUT_IMAGE_NAME} \
         "${GOLDEN_IMAGE_ISO_PATH}"
     # 🚀 Step 5: Run the ISO builder container using Podman (Kaniko can't run containers)
-    - podman run --rm --privileged \
+    - |
+      podman run --rm --privileged \
         -v $(pwd)/containers:/var/lib/containers:rw \
         -v $(pwd)/eib:/eib \
         registry.opensuse.org/isv/suse/edge/edgeimagebuilder/containerfile/suse/edge-image-builder:${IMAGE_VERSION} \
         build --definition-file definition.yaml --config-dir /eib --build-dir /eib/_build || true
     # 📦 Step 6: Upload ISO + logs
     - cp ./eib/_build/build*/*.log ./eib/logs/
-    - curl -v --retry 5 --retry-delay 10 -H "PRIVATE-TOKEN: $PRIV_TOKEN" \
+    - |
+      curl -v --retry 5 --retry-delay 10 -H "PRIVATE-TOKEN: $PRIV_TOKEN" \
         --upload-file "./eib/${CUSTOM_OUTPUT_IMAGE_NAME}.iso" \
         "${GITLAB_ISO_OUTPUT_PATH}/${CUSTOM_OUTPUT_IMAGE_NAME}_$CI_COMMIT_SHORT_SHA.iso" || true
   artifacts:
