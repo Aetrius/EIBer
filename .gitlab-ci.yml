@@ -88,7 +88,8 @@ variables:
     - find ./eib/ -type f -exec sed -i "s/SUSE_REGISTRY_CODE/${SUSE_REGISTRY_CODE}/g" {} + || true
     # 💾 Step 4: Download ISO
     - echo "Starting CURL OUTPUT" >> ./eib/logs/script.log
-    - curl -L --header "PRIVATE-TOKEN: $PRIV_TOKEN" --retry 5 --retry-connrefused \
+    - |
+      curl -L --header "PRIVATE-TOKEN: $PRIV_TOKEN" --retry 5 --retry-connrefused \
         --output ./eib/base-images/${OUTPUT_IMAGE_NAME} \
         "${GOLDEN_IMAGE_ISO_PATH}"
     # 🚀 Step 5: Run the ISO builder container using Podman (Kaniko can't run containers)
