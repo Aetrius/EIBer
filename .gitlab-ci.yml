@@ -63,7 +63,7 @@ variables:
 .build_iso_template_with_kaniko:
   stage: build_iso
   image: gcr.io/kaniko-project/executor:debug
-  tags: ["p-aether"] # use your GitLab Runner tag
+  tags: ["p-aether2"] # use your GitLab Runner tag
   variables:
     DOCKER_CONFIG: /kaniko/.docker
     IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
